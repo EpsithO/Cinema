@@ -11,8 +11,8 @@ class SeanceFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $seance = new Seance();
         for ($i = 0; $i < 10; $i++) {
+            $seance = new Seance();
             $seance->setDateProjection(new \DateTime());
             $seance->setTarifNormal(25);
             $seance->setTarifReduit(15);
