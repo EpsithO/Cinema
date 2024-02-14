@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Film;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 ;
 
@@ -11,19 +12,17 @@ class FilmFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        for($i = 0; $i < 10; $i++){
+        $faker = \Faker\Factory::create();
+        $faker->addProvider(new \Xylis\FakerCinema\Provider\Movie($faker));
 
+        for ($i=0;$i<=20;$i++) {
             $film = new Film();
-            $faker = \Faker\Factory::create();
-            $faker->addProvider(new \Xylis\FakerCinema\Provider\Movie($faker));
-            $film->setTitre($faker->movie());
-            $film->setDuree(rand(60, 180));
-
-
+            $film->setTitre($faker->movie);
+            $film->setDuree(random_int(30,200));
             $manager->persist($film);
 
+            $this->addReference("Film".$i,$film);
         }
-
         $manager->flush();
     }
 }

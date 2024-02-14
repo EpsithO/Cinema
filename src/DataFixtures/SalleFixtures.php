@@ -11,14 +11,17 @@ class SalleFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        for ($i = 0; $i < 10; $i++) {
+        $faker = \Faker\Factory::create();
+        $faker->addProvider(new \Xylis\FakerCinema\Provider\Person($faker));
 
+        for ($i=0;$i<=20;$i++) {
             $salle = new Salle();
-            $salle->setNom("Salle $i");
-            $salle->setNombrePlace(rand(10, 100));
+            $salle->setNomSalle($faker->actor);
+            $salle->setNbPlace(random_int(15,150));
             $manager->persist($salle);
-        }
 
+            $this->addReference("Salle"."$i",$salle);
+        }
         $manager->flush();
     }
 }
