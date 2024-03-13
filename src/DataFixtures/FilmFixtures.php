@@ -6,22 +6,24 @@ use App\Entity\Film;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
+use Xylis\FakerCinema\Provider\Movie
+
 ;
 
 class FilmFixtures extends Fixture
 {
-    public function load(ObjectManager $manager): void
+        public const FILM_REFERENCE = "film-";
+        public function load(ObjectManager $manager): void
     {
-        $faker = \Faker\Factory::create();
-        $faker->addProvider(new \Xylis\FakerCinema\Provider\Movie($faker));
-
-        for ($i=0;$i<=20;$i++) {
+        $faker = Factory::create();
+        $faker->addProvider(new Movie($faker));
+        for($i = 0; $i < 20; $i++){
             $film = new Film();
             $film->setTitre($faker->movie);
-            $film->setDuree(random_int(30,200));
+            $film->setDuree(mt_rand(90, 210));
             $manager->persist($film);
-
-            $this->addReference("Film".$i,$film);
+            $this->addReference(self::FILM_REFERENCE.$i,$film);
         }
         $manager->flush();
     }

@@ -70,7 +70,7 @@ class Film
     {
         if (!$this->seances->contains($seance)) {
             $this->seances->add($seance);
-            $seance->addFilm($this);
+            $seance->setFilm($this);
         }
 
         return $this;
@@ -79,7 +79,10 @@ class Film
     public function removeSeance(Seance $seance): static
     {
         if ($this->seances->removeElement($seance)) {
-            $seance->removeFilm($this);
+            // set the owning side to null (unless already changed)
+            if ($seance->getFilm() === $this) {
+                $seance->setFilm(null);
+            }
         }
 
         return $this;

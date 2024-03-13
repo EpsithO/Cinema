@@ -21,15 +21,16 @@ class FilmRepository extends ServiceEntityRepository
         parent::__construct($registry, Film::class);
     }
 
-    public function findFilmAffiche(Film $film): array
+    public function findFilmAffiche(int $film): ?Film
     {
         return $this->createQueryBuilder('f')
-            ->join('f.seances','s')
-            ->andWhere('s.dateProjection <= :now')
-            ->setParameter('now',new \DateTime())
+            ->leftJoin('f.seances', 's')
+            ->addSelect('s')
+            ->where('f.id = :filmId')
+            ->setParameter('filmId', $film)
+            ->orderBy('s.dateProjection', 'ASC') // On trie par date de projection
             ->getQuery()
-            ->getResult()
-        ;
+            ->getOneOrNullResult();
     }
 
 //    /**
