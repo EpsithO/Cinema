@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Film a l'affiche{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h1 class="text-center">Film a l'affiche</h1>
+        <div class="row">
+            {% for film in films %}
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <img src="/src/img/pharah-u6.jpg" class="card-img-top" alt="{{ film.titre }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ film.titre }}</h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                </div>
+                                <small class="text-muted">{{ film.duree}}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+{% endblock %}

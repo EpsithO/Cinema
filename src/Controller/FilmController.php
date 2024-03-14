@@ -22,16 +22,22 @@ class FilmController extends AbstractController
     public function index(FilmRepository $repository, SerializerInterface $serializer): Response
     {
         $films = $repository->findAll();
-        $filmsSerialized = $serializer->serialize($films, 'json', ['groups' => 'list_films']);
+        $filmsSerialized = $serializer->serialize($films, 'json', ['groups' => 'film_affiche']);
+        // affichage des films avec twig tempaltes/film/index.html.twig
         return new Response($filmsSerialized, 200, [
-            'content-type' => 'application/json'
+            'content-type' => 'application/json',
+
+            $this->render('film/index.html.twig', [
+                'controller_name' => 'FilmController',
+                'films' => $films
+            ])
         ]);
     }
 
     #[Route('/films/{id}', name:'api_film_show')]
     public function show(FilmRepository $filmRepository, SerializerInterface $serializer, int $id): Response{
-        $film = $filmRepository->findFilmWithSeancesSorted($id);
-        $filmSerialized = $serializer->serialize($film, 'json', ['groups' => 'show_film']);
+        $film = $filmRepository->findFilmAffiche($id);
+        $filmSerialized = $serializer->serialize($film, 'json', ['groups' => 'film_detail']);
         return new Response($filmSerialized, 200, [
             'content-type' => 'application/json'
         ]);
